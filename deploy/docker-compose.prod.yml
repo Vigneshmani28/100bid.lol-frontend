@@ -1,0 +1,62 @@
+# Runs ON the EC2 instance. Pulls pre-built images from ECR — does not build
+# anything on the box.
+#
+# Usage on EC2, from this deploy/ directory:
+#   export BACKEND_IMAGE=<acct>.dkr.ecr.ap-south-1.amazonaws.com/100bid-backend:latest
+#   export FRONTEND_IMAGE=<acct>.dkr.ecr.ap-south-1.amazonaws.com/100bid-frontend:latest
+#   docker compose -f docker-compose.prod.yml pull
+#   docker compose -f docker-compose.prod.yml up -d
+
+services:
+  backend:
+    image: ${BACKEND_IMAGE}
+    restart: unless-stopped
+    env_file: ./backend.env
+    volumes:
+      - uploads:/app/uploads
+    expose:
+      - "4000"
+
+  frontend:
+    image: ${FRONTEND_IMAGE}
+    restart: unless-stopped
+    env_file: ./frontend.env
+    expose:
+      - "3000"
+    depends_on:
+      - backend
+
+  nginx:
+    image: nginx:alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - certbot_etc:/etc/letsencrypt
+      - certbot_www:/var/www/certbot
+    # nginx resolves upstream hostnames once at startup and refuses to boot
+    # if resolution fails — "backend started" isn't enough of a guarantee,
+    # it must actually be answering its healthcheck first, or nginx can lose
+    # a race against a backend that's still initializing/restarting.
+    depends_on:
+      backend:
+        condition: service_healthy
+      frontend:
+        condition: service_healthy
+
+  # Idle by default (entrypoint "true" exits immediately). Invoked as one-off
+  # commands via `docker compose run --rm certbot ...` to issue/renew certs —
+  # see the deploy guide for the exact commands.
+  certbot:
+    image: certbot/certbot
+    entrypoint: "true"
+    volumes:
+      - certbot_etc:/etc/letsencrypt
+      - certbot_www:/var/www/certbot
+
+volumes:
+  uploads:
+  certbot_etc:
+  certbot_www:

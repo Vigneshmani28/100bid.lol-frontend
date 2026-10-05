@@ -1,0 +1,1 @@
+// PostHog client initialization removed

@@ -1,0 +1,25 @@
+# Replace yourdomain.com below with your real domain (and www subdomain, if
+# used). Caddy provisions and renews Let's Encrypt TLS certificates for these
+# automatically the first time it starts — no certbot, no manual renewal.
+#
+# DNS A record for the domain must already point at this EC2 instance's
+# Elastic IP before Caddy can issue the certificate.
+
+yourdomain.com, www.yourdomain.com {
+    # Backend API
+    handle /api/* {
+        reverse_proxy backend:4000
+    }
+
+    # Uploaded ad images served by the backend
+    handle /uploads/* {
+        reverse_proxy backend:4000
+    }
+
+    # Everything else -> the Next.js frontend
+    handle {
+        reverse_proxy frontend:3000
+    }
+
+    encode gzip
+}

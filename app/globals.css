@@ -1,0 +1,285 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+:root {
+  /* Base */
+  --background: #faf8f6;
+  --foreground: #1c1916;
+
+  /* Brand */
+  --color-primary: #e87554;
+  --color-primary-hover: #d96343;
+  --color-primary-foreground: #ffffff;
+
+  /* Surfaces */
+  --color-surface: #ffffff;
+  --color-surface-hover: #f5f1ed;
+  --color-border: #e5dfd9;
+  --color-border-strong: #d4cbc3;
+
+  /* Text */
+  --color-muted: #6f6862;
+  --color-muted-foreground: #9a918a;
+
+  /* Status */
+  --color-success: #4f8f5d;
+  --color-danger: #d95757;
+
+  /* ---------------------------------------------------------------------- */
+  /* shadcn/ui token aliases                                                 */
+  /* ---------------------------------------------------------------------- */
+
+  --card: var(--color-surface);
+  --card-foreground: var(--foreground);
+
+  --popover: var(--color-surface);
+  --popover-foreground: var(--foreground);
+
+  --primary: var(--color-primary);
+  --primary-foreground: var(--color-primary-foreground);
+
+  --secondary: var(--color-surface-hover);
+  --secondary-foreground: var(--foreground);
+
+  --accent: var(--color-surface-hover);
+  --accent-foreground: var(--foreground);
+
+  --destructive: var(--color-danger);
+
+  --border: var(--color-border);
+  --input: var(--color-border);
+
+  --ring: var(--color-primary);
+
+  --radius: 0.625rem;
+}
+
+/* Dark theme */
+:root.dark {
+  /* Base */
+  --background: #0f0d0b;
+  --foreground: #f5f1ed;
+
+  /* Brand */
+  --color-primary: #e87554;
+  --color-primary-hover: #f58568;
+  --color-primary-foreground: #ffffff;
+
+  /* Surfaces */
+  --color-surface: #1a1815;
+  --color-surface-hover: #242220;
+  --color-border: #2d2925;
+  --color-border-strong: #3d3935;
+
+  /* Text */
+  --color-muted: #9a918a;
+  --color-muted-foreground: #6f6862;
+
+  /* Status */
+  --color-success: #5fa368;
+  --color-danger: #e86868;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  --color-primary: var(--color-primary);
+  --color-primary-hover: var(--color-primary-hover);
+  --color-primary-foreground: var(--color-primary-foreground);
+
+  --color-surface: var(--color-surface);
+  --color-surface-hover: var(--color-surface-hover);
+
+  --color-border: var(--color-border);
+  --color-border-strong: var(--color-border-strong);
+
+  --color-muted: var(--color-muted);
+  --color-muted-foreground: var(--color-muted-foreground);
+
+  --color-success: var(--color-success);
+  --color-danger: var(--color-danger);
+
+  /* Font */
+  --font-sans: "Poppins", sans-serif;
+  --font-heading: "Poppins", sans-serif;
+  --font-mono: var(--font-geist-mono);
+
+  /* shadcn */
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-destructive: var(--destructive);
+
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+
+  /* Radius */
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+* {
+  border-color: var(--color-border);
+}
+
+html {
+  color-scheme: light;
+}
+
+html.dark {
+  color-scheme: dark;
+}
+
+::selection {
+  background: var(--color-primary);
+  color: var(--color-primary-foreground);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+
+  html {
+    @apply font-sans;
+    transition: background-color 300ms ease-in-out, color 300ms ease-in-out;
+  }
+}
+
+/* -------------------------------------------------------------------------- */
+/* Checkout celebration                                                        */
+/* -------------------------------------------------------------------------- */
+
+@keyframes confetti-fall {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, -12px, 0) rotate(0deg) scale(0.6);
+  }
+
+  12% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate3d(var(--confetti-x, 0), 220px, 0)
+      rotate(var(--confetti-spin, 360deg)) scale(1);
+  }
+}
+
+@keyframes seal-pop {
+  0% {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+
+  60% {
+    opacity: 1;
+    transform: scale(1.08);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes rise-in {
+  0% {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* A slow breath on the step that is currently in progress. */
+@keyframes step-pulse {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.35);
+  }
+}
+
+.animate-confetti {
+  animation: confetti-fall 1.6s cubic-bezier(0.2, 0.6, 0.35, 1) forwards;
+}
+
+.animate-seal {
+  animation: seal-pop 460ms cubic-bezier(0.22, 1.2, 0.36, 1) both;
+}
+
+.animate-rise {
+  animation: rise-in 420ms ease-out both;
+}
+
+.animate-step {
+  animation: step-pulse 1.6s ease-in-out infinite;
+}
+
+/* Celebration is decoration: for anyone who has asked for less motion,
+   the same information arrives with no movement at all. */
+@media (prefers-reduced-motion: reduce) {
+  .animate-confetti {
+    display: none;
+  }
+
+  .animate-seal,
+  .animate-rise,
+  .animate-step {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes claims-marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.animate-claims-marquee {
+  animation: claims-marquee 40s linear infinite;
+}
+
+.claims-marquee:hover .animate-claims-marquee {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-claims-marquee {
+    animation: none;
+  }
+}
